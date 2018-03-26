@@ -35,17 +35,17 @@
         <li class=""><a href="{{ route('item.index') }}"><i class="fa fa-link"></i> <span>Data Product</span></a></li>
         <li><a href="{{ route('category.index') }}"><i class="fa fa-link"></i> <span>Data Category</span></a></li>
         <li><a href="{{ route('brand.index') }}"><i class="fa fa-link"></i> <span>Data Brand</span></a></li>
-        {{--  <li class="treeview">
-            <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+        <li class="treeview">
+            <a href="#"><i class="fa fa-gear"></i> <span>Setting</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
                 </span>
             </a>
             <ul class="treeview-menu">
-            <li><a href="#">Link in level 2</a></li>
+            <li><a href="{{ route('banner.index') }}"><i class="fa fa-map-o"></i> <span>Banner</span></a></li>
             <li><a href="#">Link in level 2</a></li>
             </ul>
-        </li>  --}}
+        </li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>

@@ -33,6 +33,10 @@ Route::resource('brand', 'BrandController');
 Route::get('api/brands', 'BrandController@apiBrands')->name('api.brands'); // untuk datatable yajra
 
 
+Route::resource('banner', 'BannerController');
+Route::get('api/banner', 'BannerController@apiBrands')->name('api.banner'); // untuk datatable yajra
+
+
 
 // image in desc upload
 Route::post('upload_img/desc', function (){
