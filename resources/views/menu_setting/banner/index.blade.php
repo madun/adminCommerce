@@ -48,10 +48,11 @@
             <thead>
             <tr>
                 <th width="30">No.</th>
-                <th>Name</th>
+                <th>Title</th>
                 <th>Parent Category</th>
-                <th>Icon</th>
-                <th>image</th>
+                <th>For</th>
+                <th>Status</th>
+                <th>Image</th>
                 <th width="190">Action</th>
             </tr>
             </thead>
@@ -71,11 +72,25 @@
 <script src="{{ asset('datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 
 <script>
+    // $(function() {
+    //     $.ajax({
+    //         type:'get',
+    //         url:"{{ route('api.banner') }}",
+    //         success: function(data){
+    //             console.log(data)
+    //         }
+    //     });
+    // }); 
     var table = $('#banner-table').dataTable({
                     processing: true,
                     serverSide: true,
-                    ajax : "{{ route('api.category') }}",
+                    ajax : "{{ route('api.banner') }}",
                     'columnDefs': [
+                    {
+                        "targets": 6, // your case first column
+                        "className": "text-center",
+                        "width": "130",
+                    },
                     {
                         "targets": 5, // your case first column
                         "className": "text-center",
@@ -98,14 +113,14 @@
                     }],
                     columns: [
                         {data:'id', name:'id'},
-                        {data:'displaycategory', name:'displaycategory'},
+                        {data:'title', name:'title'},
                         {data:'parent_id', name:'parent_id'},
-                        {data:'icon', name:'icon'},
-                        {data:'imagecategory', name:'imagecategory', searchable: false},
+                        {data:'for', name:'for'},
+                        {data:'status', name:'status'},
+                        {data:'image', name:'image', orderable: false, searchable: false},
                         {data:'action', name:'action', orderable: false, searchable: false}
                     ]
                 });
-
-    
+   
 </script>
 @endsection
