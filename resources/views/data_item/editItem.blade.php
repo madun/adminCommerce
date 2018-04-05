@@ -28,6 +28,28 @@
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
  }
+
+ input[type="file"] {
+  display: block;
+}
+.imageThumb {
+  max-height: 75px;
+  /* border: 2px solid; */
+  padding: 1px;
+  cursor: pointer;
+}
+.pip {
+  display: inline-block;
+  margin: 10px 10px 0 0;
+}
+.remove {
+  display: block;
+  background: #F44336;
+  /* border: 1px solid black; */
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
  </style>
 @endsection
 
@@ -71,22 +93,12 @@
                         <p class="help-block pull-right">* for Resolution 0 x 0 Recomended .</p>
                     </div>   --}}
                     <label for="">Image Item</label>
-                    <div class="input-group control-group increment" >
-                        <input type="file" name="image_item[]" class="form-control">
-                        <div class="input-group-btn"> 
-                            <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i></button>
-                        </div>
+                    <div class="input-group" >
+                        <input type="file" id="files" name="image_item[]" class="" multiple>
                     </div>
-                    <div class="clone hide">
-                        <div class="control-group input-group" style="margin-top:10px">
-                            <input type="file" name="image_item[]" class="form-control">
-                            <div class="input-group-btn"> 
-                                <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i></button>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <br>
-                    <label for="">Current Item</label>
+                    <label for="">Current Image</label>
                     <div class="row">
                         
                         @if($item->image_item)
@@ -252,14 +264,37 @@
             $('.charCount').text(cs);
         }
         // upload image
-        $(".btn-success").click(function(){ 
-            var html = $(".clone").html();
-            $(".increment").after(html);
-        });
-
-        $("body").on("click",".btn-danger",function(){ 
-            $(this).parents(".control-group").remove();
-        });
+        if (window.File && window.FileList && window.FileReader) {
+            $("#files").on("change", function(e) {
+            var files = e.target.files,
+                filesLength = files.length;
+            for (var i = 0; i < filesLength; i++) {
+                var f = files[i]
+                var fileReader = new FileReader();
+                fileReader.onload = (function(e) {
+                var file = e.target;
+                $("<span class=\"pip\">" +
+                    "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+                    "<br/><span class=\"remove\">Remove</span>" +
+                    "</span>").insertAfter("#files");
+                $(".remove").click(function(){
+                    $(this).parent(".pip").remove();
+                });
+                
+                // Old code here
+                /*$("<img></img>", {
+                    class: "imageThumb",
+                    src: e.target.result,
+                    title: file.name + " | Click to remove"
+                }).insertAfter("#files").click(function(){$(this).remove();});*/
+                
+                });
+                fileReader.readAsDataURL(f);
+            }
+            });
+        } else {
+            alert("Your browser doesn't support to File API")
+        }
 
         // end upload image
 
