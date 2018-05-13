@@ -56,7 +56,7 @@ class BannerController extends Controller
             $banner->image = $storeDatabase; 
         }
         $banner->save();
-        return redirect()->route('banner.index')->with('status', 'Data Banned Has Been Saved');
+        return redirect()->route('banner.index')->with('status', 'Data Banner Has Been Saved');
     }
 
     /**

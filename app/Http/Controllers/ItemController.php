@@ -37,7 +37,8 @@ class ItemController extends Controller
     public function create()
     {
         $brands = Brands::all();
-        return view('data_item.addItem', ['brands' => $brands]);
+        $categories = Category::all();
+        return view('data_item.addItem', ['brands' => $brands, 'categories' => $categories]);
     }
 
     /**
@@ -64,6 +65,8 @@ class ItemController extends Controller
                 $dataImage .= $storeDatabase.';';  
             }
          }
+        
+        //  return $dataImage;
 
         $item = new Item;
         $item->displayname = $request->displayname;
@@ -162,12 +165,6 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        $item = Item::findOrFail($id);
-        // $myArray = explode(';', $item->image_item);
-        // array_pop($myArray); // remove data kosong di akhiir
-        // $length = count($myArray);
-        // Storage::delete($myArray);
-
         Item::destroy($id);
         return redirect()->route('item.index')->with('status', 'Data Item Has Been Deleted');
     }

@@ -38,6 +38,13 @@ Route::group(['middleware' => 'auth'],function(){
     Route::get('api/banner', 'BannerController@apiBanner')->name('api.banner'); // untuk datatable yajra
 
 
+    Route::resource('voucher', 'VoucherController');
+    Route::get('api/voucher', 'VoucherController@apiVoucher')->name('api.voucher'); // untuk datatable yajra
+
+    Route::resource('mail', 'MailController');
+    Route::get('api/mail', 'MailController@apiMailTemplate')->name('api.mailTemplate'); // untuk datatable yajra
+
+
 
 // image in desc upload
     Route::post('upload_img/desc', function (){
@@ -49,6 +56,24 @@ Route::group(['middleware' => 'auth'],function(){
         if($move){
             return response()->json([
                 'filelink'=> url('storage/upload/image_desc/'.$filename)
+            ]);
+        }else{
+            return response()->json([
+                'error'=> true
+            ]);
+        }
+    });
+
+    // image in desc upload mail template
+    Route::post('mail_image/desc', function (){
+        $image = Input::file('file');
+        $filename = 'img-desc'.rand(10, 99999999).'.'.$image->getClientOriginalExtension();
+        // $move = $image->storeAs('public/upload/image_desc', $filename);
+        $move = Image::make($image->getRealPath())->save(public_path('storage/upload/mail_image/') . $filename);
+
+        if($move){
+            return response()->json([
+                'filelink'=> url('storage/upload/mail_image/'.$filename)
             ]);
         }else{
             return response()->json([
