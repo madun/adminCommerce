@@ -49,44 +49,42 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        // request()->validate([
-        //     'image_item' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        // ]);
+        return $request;
 
-        $dataImage = "";
-        if($request->hasfile('image_item'))
-         {
-            foreach($request->file('image_item') as $image)
-            {
-                $imageName = rand(1, 10000). time() . '.' . $image->getClientOriginalExtension();
-                // $imageName =  rand(1, 10000). 'Madun.' . $image->getClientOriginalExtension();
-                $storeDatabase = 'storage/upload/image_item/'. $imageName;
-                Image::make($image->getRealPath())->resize(500, 400)->save(public_path('storage/upload/image_item/') . $imageName);  
-                $dataImage .= $storeDatabase.';';  
-            }
-         }
+        // $dataImage = "";
+        // if($request->hasfile('image_item'))
+        //  {
+        //     foreach($request->file('image_item') as $image)
+        //     {
+        //         $imageName = rand(1, 10000). time() . '.' . $image->getClientOriginalExtension();
+        //         // $imageName =  rand(1, 10000). 'Madun.' . $image->getClientOriginalExtension();
+        //         $storeDatabase = 'storage/upload/image_item/'. $imageName;
+        //         Image::make($image->getRealPath())->resize(500, 400)->save(public_path('storage/upload/image_item/') . $imageName);  
+        //         $dataImage .= $storeDatabase.';';  
+        //     }
+        //  }
         
-        //  return $dataImage;
+        // //  return $dataImage;
 
-        $item = new Item;
-        $item->displayname = $request->displayname;
-        $item->category_id = $request->category_id;
-        $item->weight = $request->weight;
-        $item->promotion_item = $request->promotion_item;
-        $item->price = str_replace(".","",$request->price);
-        $item->additionalinfo = $request->additionalinfo;
-        $item->description = $request->description;
-        $item->image_item = $dataImage;
-        $item->summary = $request->summary;
-        $item->brands_id = $request->brands_id;
-        $item->condition = $request->condition;
-        $result = $item->save();
+        // $item = new Item;
+        // $item->displayname = $request->displayname;
+        // $item->category_id = $request->category_id;
+        // $item->weight = $request->weight;
+        // $item->promotion_item = $request->promotion_item;
+        // $item->price = str_replace(".","",$request->price);
+        // $item->additionalinfo = $request->additionalinfo;
+        // $item->description = $request->description;
+        // $item->image_item = $dataImage;
+        // $item->summary = $request->summary;
+        // $item->brands_id = $request->brands_id;
+        // $item->condition = $request->condition;
+        // $result = $item->save();
 
-        if($result){
-            return redirect()->route('item.index')->with('status', 'Data Item Has Been Saved');
-        }else{
-            return false;
-        }
+        // if($result){
+        //     return redirect()->route('item.index')->with('status', 'Data Item Has Been Saved');
+        // }else{
+        //     return false;
+        // }
     }
 
     /**
