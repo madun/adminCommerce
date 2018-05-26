@@ -64,15 +64,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Parent Category</label>
-                                        <select class="form-control" style="width: 100%;" id="select2" name="parent_id">
-                                            <option value="">No Parent</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}" >{{ $category->displaycategory }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    <label for="exampleInputEmail1">Banner Untuk</label>
+                                    <select class="form-control" style="width: 100%;" id="select" name="for" onchange="getParentCategory(this.value)">
+                                        <option value="Dashboard" >Dashboard</option>
+                                        <option value="Kategori" >Kategori</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -83,12 +79,16 @@
                                     </div>
                                     <p class="help-block">* Recomended Resolution x .</p>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="exampleInputEmail1">Banner Untuk</label>
-                                    <select class="form-control" style="width: 100%;" id="select" name="for">
-                                        <option value="Dashboard" >Dashboard</option>
-                                        <option value="Kategori" >Kategori</option>
-                                    </select>
+                                <div class="col-md-6" id="category_id">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Parent Category</label>
+                                        <select class="form-control" style="width: 100%;" id="select2" name="parent_id">
+                                            <option value="">No Parent</option>
+                                            @foreach($categories as $category)
+                                                <option value="{{ $category->id }}" >{{ $category->displaycategory }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -119,7 +119,19 @@
         $('#select2').select2();
         $('#select').select2();
 
-        $('.my-colorpicker1').colorpicker()
+        $('.my-colorpicker1').colorpicker();
+
+        $('#category_id').hide();
+        $('[name=parent_id]').val('');
     });
+
+    function getParentCategory(value){
+        if(value == 'Kategori'){
+            $('#category_id').show();
+        } else {
+            $('#category_id').hide();
+            $('[name=parent_id]').val('');
+        }
+    }
 </script>
 @endsection

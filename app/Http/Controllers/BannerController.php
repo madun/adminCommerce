@@ -42,7 +42,9 @@ class BannerController extends Controller
         // return $request->all();
         $banner = new Banner;
         $banner->title = $request->title;
-        $banner->parent_id = $request->parent_id;
+        if($request->parent_id != null){
+            $banner->parent_id = $request->parent_id;
+        }
         $banner->for = $request->for;
         $banner->background = $request->background;
         if($request->status){
@@ -94,7 +96,9 @@ class BannerController extends Controller
     {
         $banner = Banner::findOrFail($id);
         $banner->title = $request->title;
-        $banner->parent_id = $request->parent_id;
+        if($request->parent_id == null){
+            $banner->parent_id = $request->parent_id;
+        }
         $banner->for = $request->for;
         $banner->background = $request->background;
         if($request->status){
