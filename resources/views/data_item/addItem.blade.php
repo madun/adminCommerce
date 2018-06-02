@@ -227,8 +227,8 @@
                     </div>
                     <div class="form-group">
                         {{--  <button type="button" onclick="check()" class="btn btn-default pull-left">Close</button>  --}}
-                        {{-- <input type="submit" class="from-control btn btn-primary pull-right" value="Save changes"> --}}
-                        <input onclick="simpanaddbarang()" type="button" class="from-control btn btn-primary pull-right" value="Save changes">
+                        <input type="submit" class="from-control btn btn-primary pull-right" value="Save changes">
+                        {{-- <input onclick="simpanaddbarang()" type="button" class="from-control btn btn-primary pull-right" value="Save changes"> --}}
                     </div>
         </form>
     </div>
@@ -256,6 +256,12 @@
                                             '<i class="fa-stack fa-lg removeimage-mrg">'+
                                             '<i class="fa fa-times-circle fa-stack-2x"></i></i></div>');
                     // $("#placeforfotobarang").append('<input type="file" name="barangfoto[]" id="brg'+brgid+'" class="hidden barangfoto" value="'+e.target.result+'">');
+                    var idsaja = $(this).attr("id");
+                    var nilai = $(this).attr("dataforthis");
+                    if(idsaja!="bbgforadd"){
+                        $("#placeforfotobarang").append('<input id="image_item'+brgid+'" type="file" name="image_item[]" class="hidden barangfoto" value="'+nilai+'">');
+                    }
+                    
                     if(brgid==5){
                         $("#bbgforadd").hide();
                     } else {
@@ -309,22 +315,23 @@
 
     function brgidremove(thisin,brgid){
         $(thisin).remove();
+        $('#image_item'+brgid+'').remove();
         $('#bbgforadd').show();
     }
     
-    function simpanaddbarang(){
-        $("#bbgforplace").find(".addimage").each(function(){
-            var idsaja = $(this).attr("id");
-            var nilai = $(this).attr("dataforthis");
-            if(idsaja!="bbgforadd"){
-                $("#placeforfotobarang").append('<input type="file" name="image_item[]" class="hidden barangfoto" value="'+nilai+'">');
-            }
-        });
+    // function simpanaddbarang(){
+    //     $("#bbgforplace").find(".addimage").each(function(){
+    //         var idsaja = $(this).attr("id");
+    //         var nilai = $(this).attr("dataforthis");
+    //         if(idsaja!="bbgforadd"){
+    //             $("#placeforfotobarang").append('<input type="file" name="image_item[]" class="hidden barangfoto" value="'+nilai+'">');
+    //         }
+    //     });
 
-        $("#formaddproduct").submit();
-    // var length = $("#placeforfotobarang").find(".barangfoto").length;
-    // alert(length);
-    }
+    //     $("#formaddproduct").submit();
+    // // var length = $("#placeforfotobarang").find(".barangfoto").length;
+    // // alert(length);
+    // }
     
     $("#formaddproduct").submit(function(e) {
         var postData = $(this).serializeArray();

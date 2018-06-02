@@ -49,9 +49,18 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
+        $dataImage = "";
+        foreach($request->file('image_item') as $image)
+        {
+            $imageName = rand(1, 10000). time() . '.' . $image->getClientOriginalExtension();
+            // $imageName =  rand(1, 10000). 'Madun.' . $image->getClientOriginalExtension();
+            $storeDatabase = 'storage/upload/image_item/'. $imageName;
+            // Image::make($image->getRealPath())->resize(500, 400)->save(public_path('storage/upload/image_item/') . $imageName);  
+            $dataImage .= $storeDatabase.';';
+        }
 
-        // $dataImage = "";
+        return $dataImage;
+
         // if($request->hasfile('image_item'))
         //  {
         //     foreach($request->file('image_item') as $image)
