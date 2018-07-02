@@ -2,9 +2,8 @@
 @section('title', 'Add Item')
 
 @section('style')
-<!-- css -->
-<link href="jquery.fileuploader.min.css" media="all" rel="stylesheet">
  <!-- Select2 -->
+ {{--  <link rel="stylesheet" href="{{ asset('dropzone/dropzone.css') }}">  --}}
  <link rel="stylesheet" href="{{ asset('select2/dist/css/select2.min.css') }}">
  <link rel="stylesheet" href="{{ asset('WYSIWYG Redactor/redactor.css') }}">
  <style>
@@ -30,26 +29,41 @@
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
  }
 
- input[type="file"] {
-  display: block;
+.addimage{
+    width: 100px;
+    height: 100px;
+    background: #eaeaea;
+    cursor: pointer;
+    border-radius: 5px;
 }
-.imageThumb {
-  max-height: 75px;
-  /* border: 2px solid; */
-  padding: 1px;
-  cursor: pointer;
+
+.addimage-mrg{
+    margin: 34px;
 }
-.pip {
-  display: inline-block;
-  margin: 10px 10px 0 0;
+
+.addimage:hover{
+    background: #f2f2f2;
+    color: #0b9a48;
 }
-.remove {
-  display: block;
-  background: #F44336;
-  /* border: 1px solid black; */
-  color: white;
-  text-align: center;
-  cursor: pointer;
+
+.addimage:hover > .removeimage-mrg{
+    display: block !important;
+}
+
+.removeimage-mrg{
+    margin: 34px;
+    display: none !important;
+}
+
+.removeimage:hover{
+    background: #f2f2f2;
+    color: #0b9a48;
+    display: block;
+}
+
+#addimageall{
+    width: 80px;
+    padding: 4px;
 }
  </style>
 @endsection
@@ -79,13 +93,32 @@
         </div>
     </div>
     <div class="box-body">
-            <form role="form" data-toggle="validator" class="col-md-6 col-md-offset-3" method="POST" enctype="multipart/form-data" action="{{ route('item.store') }}">
+            <form id="formaddproduct" role="form" data-toggle="validator" class="col-md-6 col-md-offset-3" method="POST" enctype="multipart/form-data" action="{{ route('item.store') }}">
                 {{ csrf_field() }}
 
                     <label for="">Image Item</label>
                     <div class="input-group" >
-                        <input type="file" id="files" name="image_item[]" class="" multiple>
+                        <table>
+                            <tbody>
+                                <tr id="addimageall">
+                                    <td id="bbgforplace">
+                                        <input type="file" name="image_item" id="brgcontoh" class="hidden">
+                                        <!--background-image: url(http://localhost/gemstone-web/foto_profile/3.jpeg);-->
+                                        <div id="bbgforadd" onclick="javascript:document.getElementById('brgcontoh').click();" class="addimage" style="float: left;background-size: cover;background-repeat: no-repeat;background-position: center center;">
+                                            <!--<img id="bgt" class='thumbnails' style="max-height: 100px !important; max-width: 100px !important; border-radius: 5px;" src="">-->
+                                            <i class="fa-stack fa-lg addimage-mrg">
+                                                <i class="fa fa-plus-circle fa-stack-2x"></i>
+                                                <!--<i class="fa fa-circle-thin fa-stack-2x"></i>-->
+                                            </i>
+                                        </div>
+                                    </td>
+                                    <td id="placeforfotobarang"></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+
+
                     <br>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Deskripsi Singkat</label>
@@ -194,7 +227,8 @@
                     </div>
                     <div class="form-group">
                         {{--  <button type="button" onclick="check()" class="btn btn-default pull-left">Close</button>  --}}
-                        <button type="submit" class="from-control btn btn-primary pull-right">Save changes</button>
+                        <input type="submit" class="from-control btn btn-primary pull-right" value="Save changes">
+                        {{-- <input onclick="simpanaddbarang()" type="button" class="from-control btn btn-primary pull-right" value="Save changes"> --}}
                     </div>
         </form>
     </div>
@@ -213,6 +247,32 @@
 {{--  <script src="{{ asset('dropzone/dropzone.js') }}"></script>  --}}
 
 <script>
+    $(document).ready(function(){
+        function readImageNoReload(input, brgid) {
+            if ( input.files && input.files[0] ) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $("#bbgforplace").append('<div id="bgrid'+brgid+'" onclick="javascript:brgidremove(this,'+brgid+')" class="addimage" style="float:left;margin-left: 10px;background-size: cover;background-repeat: no-repeat;background-position: center center; background-image: url('+e.target.result+')" dataforthis="'+e.target.result+'">'+
+                                            '<i class="fa-stack fa-lg removeimage-mrg">'+
+                                            '<i class="fa fa-times-circle fa-stack-2x"></i></i></div>');
+                    // $("#placeforfotobarang").append('<input type="file" name="barangfoto[]" id="brg'+brgid+'" class="hidden barangfoto" value="'+e.target.result+'">');
+                    
+                    if(brgid==5){
+                        $("#bbgforadd").hide();
+                    } else {
+                        $("#bbgforadd").show();
+                    }
+                };       
+                FR.readAsDataURL( input.files[0] );
+            }
+        }
+        $("#brgcontoh").change(function(){
+            var bgridnumber = $("#bbgforplace").find(".addimage").length;
+            readImageNoReload( this, bgridnumber );
+        });
+    });
+
+
     $('#kondisibarang').select2();
     $('#brand').select2();
     $('#promotion_item').select2();
@@ -233,40 +293,6 @@
     });
 
 
-    $(function() {
-        // upload image
-        if (window.File && window.FileList && window.FileReader) {
-            $("#files").on("change", function(e) {
-            var files = e.target.files,
-            filesLength = files.length;
-                for (var i = 0; i < filesLength; i++) {
-                    var f = files[i]
-                    var fileReader = new FileReader();
-                    fileReader.onload = (function(e) {
-                    var file = e.target;
-                    $("<span class=\"pip\">" +
-                        "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
-                        "<br/><span class=\"remove\">Remove</span>" +
-                        "</span>").insertAfter("#files");
-                    $(".remove").click(function(){
-                        $(this).parent(".pip").remove();
-                    });
-                    
-                    // Old code here
-                    /*$("<img></img>", {
-                        class: "imageThumb",
-                        src: e.target.result,
-                        title: file.name + " | Click to remove"
-                    }).insertAfter("#files").click(function(){$(this).remove();});*/
-                    
-                    });
-                    fileReader.readAsDataURL(f);
-                }
-            });
-        } else {
-            alert("Your browser doesn't support to File API")
-        }
-
         // end upload image
 
         $('.addSpech').redactor({
@@ -282,32 +308,74 @@
             minHeight: 300
         });
 
-        
-        var tanpa_rupiah = document.getElementById('rupiah');
-        tanpa_rupiah.addEventListener('keyup', function(e)
-        {
-            tanpa_rupiah.value = formatRupiah(this.value);
-        });
-        
-        /* Fungsi */
-        function formatRupiah(angka, prefix)
-        {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split	= number_string.split(','),
-                sisa 	= split[0].length % 3,
-                rupiah 	= split[0].substr(0, sisa),
-                ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
-                
-            if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-            
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-        }
-        
+    function brgidremove(thisin,brgid){
+        $(thisin).remove();
+        $('#bbgforadd').show();
+    }
+    
+    // function simpanaddbarang(){
+    //     $("#bbgforplace").find(".addimage").each(function(){
+    //         var idsaja = $(this).attr("id");
+    //         var nilai = $(this).attr("dataforthis");
+    //         if(idsaja!="bbgforadd"){
+    //             $("#placeforfotobarang").append('<input type="file" name="image_item[]" class="hidden barangfoto" value="'+nilai+'">');
+    //         }
+    //     });
 
+    //     $("#formaddproduct").submit();
+    // // var length = $("#placeforfotobarang").find(".barangfoto").length;
+    // // alert(length);
+    // }
+    
+    $("#formaddproduct").submit(function(e) {
+        var postData = $(this).serializeArray();
+        var formURL = $(this).attr("action");
+//                console.log($("#placeforfotobarang").find(".barangfoto").length);
+        if($("#placeforfotobarang").find(".barangfoto").length>0){
+            $.ajax({
+                url: formURL,
+                type: "POST",
+                data: postData,
+                success: function(data, textStatus, jqXHR)
+                {
+                    console.log(data);
+//                     if (typeof parseInt(data) == 'number') {
+//                         var nilaifoto = new Array();
+//                         var it=0;
+//                         $("#placeforfotobarang").find(".barangfoto").each(function(){
+//                             nilaifoto[it] = $(this).attr("value");
+// //                                console.log(nilaifoto[it]);
+//                             it++;
+//                         });
+
+//                         $.post('http://gemstone.epizy.com/store/upload_foto_barang',{
+//                             id_item : data,
+//                             foto : nilaifoto
+//                         });
+
+//                         $('#formaddproduct').each(function() {
+//                             this.reset();
+//                         });
+//                         alert("Barang anda telah tersimpan.");
+//                         window.location.replace("http://gemstone.epizy.com/store/myproduct");
+//                     } else {
+//                         $('#validation-error-addproduct').show();
+//                         $('#validation-error-addproduct').html(data);
+//                         $(window).scrollTop(0);
+//                     }
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    $('#validation-error-addproduct').show();
+                    $('#validation-error-addproduct').html(jqXHR.msg);
+                }
+            });
+        } else {
+            alert('Foto Tidak boleh kosong!');
+            $(window).scrollTop(0);
+        }
+        e.preventDefault();	//STOP default action
     });
+    
 </script>
 @endsection
